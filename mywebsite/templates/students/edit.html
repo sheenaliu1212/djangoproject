@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}<title>資料表修改(一)</title>{% endblock %}
+
+{% block content %}
+    <!-- 顯示內容區塊 -->
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">student 資料表修改(一)</h4>
+                    </div>
+                    <div class="card-body">
+                        <!--  送出去的資料，由哪一個程式接收與處理 -->
+                        <form action="/students/edit/{{unit.id}}/edit" method="GET" name="form1" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            
+                            <div class="mb-3 row">
+                                <label for="stdName" class="col-sm-3 col-form-label">姓名：</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="stdName" name="stdName" value={{unit.stdName}}>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">性別：</label>
+                                <div class="col-sm-9">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="stdSex1" name="stdSex" value="M" 
+                                            {% if unit.stdSex == "M" %}checked{% endif %} />
+                                        <label class="form-check-label" for="stdSex1">男生</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="stdSex2" name="stdSex" value="F" 
+                                            {% if unit.stdSex == "F" %}checked{% endif %} />
+                                        <label class="form-check-label" for="stdSex2">女生</label>
+                                    </div>                                    
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 row">
+                                <label for="stdBirthday" class="col-sm-3 col-form-label">生日：</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" id="stdBirthday" name="stdBirthday" value={{unit.stdBirthday}}>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 row">
+                                <label for="stdEmail" class="col-sm-3 col-form-label">Email：</label>
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control" id="stdEmail" name="stdEmail" value={{unit.stdEmail}}>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 row">
+                                <label for="stdPhone" class="col-sm-3 col-form-label">電話：</label>
+                                <div class="col-sm-9">
+                                    <input type="tel" class="form-control" id="stdPhone" name="stdPhone" value={{unit.stdPhone}}>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 row">
+                                <label for="stdAddress" class="col-sm-3 col-form-label">地址：</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="stdAddress" name="stdAddress" value={{unit.stdAddress}}>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="reset" class="btn btn-secondary me-md-2">重設</button>
+                                <button type="submit" class="btn btn-primary">送出</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+<!-- <h2>student 資料表修改(一)</h2>
+<form action="/students/edit/{{unit.id}}/edit" method="GET" name="form1">
+    <table border="1" cellspacing="1" cellpadding="4">
+        <tr>
+            <th>姓名</th>
+            <td><input type="text" id="stdName" name="stdName" value={{unit.stdName}}></td>
+        </tr>
+        <th>性別{{unit.stdSex}}</th>
+        {% if unit.stdSex == "M" %}
+        <td>
+            <input name="stdSex" type="radio" id="stdSex1" value="M" checked="checked" />男生
+            <input name="stdSex" type="radio" id="stdSex2" value="F" />女生
+        {% else %}
+        <td>
+            <input name="stdSex" type="radio" id="stdSex1" value="M" />男生
+            <input name="stdSex" type="radio" id="stdSex2" value="F" checked="checked" />女生
+        {% endif %}
+        </td>
+        </tr>
+        <tr>
+            <th>生日</th>
+            <td><input type="text" id="stdBirthday" name="stdBirthday" value={{unit.stdBirthday}}></td>
+        </tr>
+        <tr>
+        <tr>
+            <th>郵件帳號</th>
+            <td><input type="text" id="stdEmail" name="stdEmail" value={{unit.stdEmail}}></td>
+        </tr>
+        <tr>
+            <th>電話</th>
+            <td><input type="text" id="stdPhone" name="stdPhone" value={{unit.stdPhone}}></td>
+        </tr>
+        <tr>
+            <th>地址</th>
+            <td><input type="text" id="stdAddress" name="stdAddress" value={{unit.stdAddress}}></td>
+        </tr>
+        <tr>
+            <th colspan="2" align="center">
+                <input type="submit" name="button" id="button" value="送出">
+                <input type="reset" name="button2" id="button2" value="重設">
+            </th>
+        </tr>
+    </table>
+    <span style="color:red">{{message}}</span>
+</form> -->
+

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>學生表單內容</title>
+{% endblock %}
+
+{% block content %}
+    <!-- {{ postform }} -->
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">新增學生資料</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            
+                            {% for field in postform %}
+                                {% if field.name == 'stdSex' %}
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-3 col-form-label">{{ field.label }}：</label>
+                                        <div class="col-sm-9">
+                                            {{ field }}
+                                            {% if field.errors %}
+                                                <div class="invalid-feedback d-block">
+                                                    {{ field.errors }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="mb-3 row">
+                                        <label for="{{ field.id_for_label }}" class="col-sm-3 col-form-label">{{ field.label }}：</label>
+                                        <div class="col-sm-9">
+                                            {{ field }}
+                                            {% if field.errors %}
+                                                <div class="invalid-feedback d-block">
+                                                    {{ field.errors }}
+                                                </div>
+                                            {% endif %}
+                                            {% if field.help_text %}
+                                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="reset" class="btn btn-secondary me-md-2">重設</button>
+                                <button type="submit" class="btn btn-primary">送出</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

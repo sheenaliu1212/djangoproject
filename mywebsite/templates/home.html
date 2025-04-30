@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}<title>MyWebSite - 首頁</title>{% endblock %}
+{% block content %}
+<div class="jumbotron p-5 mb-4 bg-light rounded-3">
+    <div class="container py-5">
+        <h1 class="display-4">歡迎來到 MyWebSite</h1>
+        <p class="lead">這是一個使用 Django 框架建立的網站範例</p>
+        <hr class="my-4">
+        {% if request.session.username %}
+        <p>您好，{{ request.session.username }}！您已成功登入系統。</p>
+        <p>現在您可以使用所有的功能，包括學生管理系統。</p>
+        <div class="mt-4">
+            <a href="/students/index/" class="btn btn-primary btn-lg me-2">
+                <i class="fas fa-users me-2"></i>學生管理
+            </a>
+            <a href="/cookiessessions/logout/" class="btn btn-outline-danger btn-lg">
+                <i class="fas fa-sign-out-alt me-2"></i>登出系統
+            </a>
+        </div>
+        {% else %}
+        <p>您尚未登入系統。請先登入以使用全部功能。</p>
+        <div class="mt-4">
+            <a href="/cookiessessions/login/" class="btn btn-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>登入系統
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users me-2 text-primary"></i>學生管理</h5>
+                <p class="card-text">管理學生資料，包括新增、搜尋、修改和刪除學生資訊。</p>
+            </div>
+            <div class="card-footer">
+                {% if request.session.username %}
+                <a href="/students/index/" class="btn btn-sm btn-outline-primary">前往管理</a>
+                {% else %}
+                <a href="/cookiessessions/login/" class="btn btn-sm btn-outline-secondary">請先登入</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-search me-2 text-success"></i>學生搜尋</h5>
+                <p class="card-text">根據不同條件搜尋學生資料，快速找到您需要的學生信息。</p>
+            </div>
+            <div class="card-footer">
+                {% if request.session.username %}
+                <a href="/students/stdSearch/" class="btn btn-sm btn-outline-success">前往搜尋</a>
+                {% else %}
+                <a href="/cookiessessions/login/" class="btn btn-sm btn-outline-secondary">請先登入</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-user-plus me-2 text-danger"></i>新增學生</h5>
+                <p class="card-text">新增學生資料到系統，提供完整的資料輸入表單。</p>
+            </div>
+            <div class="card-footer">
+                {% if request.session.username %}
+                <a href="/students/stdForm/" class="btn btn-sm btn-outline-danger">前往新增</a>
+                {% else %}
+                <a href="/cookiessessions/login/" class="btn btn-sm btn-outline-secondary">請先登入</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

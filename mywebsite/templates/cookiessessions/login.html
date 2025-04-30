@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}<title>使用者登入</title>{% endblock %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h4><i class="fas fa-user-circle me-2"></i>使用者登入</h4>
+            </div>
+            <div class="card-body p-4">
+                {% if status == "login" %}
+                    <div class="text-center mb-4">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>{{ message }}
+                        </div>
+                        <div class="d-grid">
+                            <a href="/cookiessessions/logout/" class="btn btn-danger">
+                                <i class="fas fa-sign-out-alt me-2"></i>登出系統
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <form action="/cookiessessions/login/" method="POST" name="form1">
+                        {% csrf_token %}
+                        
+                        {% if message %}
+                        <div class="alert alert-danger mb-3">
+                            <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <label for="username" class="form-label"><i class="fas fa-user me-2"></i>帳號</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="請輸入您的帳號" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label"><i class="fas fa-lock me-2"></i>密碼</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="請輸入您的密碼" required>
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg" name="button" id="button">
+                                <i class="fas fa-sign-in-alt me-2"></i>登入系統
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="mt-4 text-center">
+                        <p class="text-muted separator d-flex align-items-center my-4">
+                            <span class="flex-grow-1 border-bottom"></span>
+                            <span class="mx-3">或使用第三方帳號登入</span>
+                            <span class="flex-grow-1 border-bottom"></span>
+                        </p>
+                        
+                        <a href="/accounts/google/login/" class="btn btn-outline-danger btn-lg w-100 d-flex align-items-center justify-content-center">
+                            <i class="fab fa-google me-2"></i>使用 Google 帳號登入
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-footer text-center text-muted">
+                <small>請使用管理員介面創建的使用者帳號登入</small><br>
+                <small>或選擇使用Google帳號登入</small><br>
+                <small><a href="/admin/" target="_blank">前往管理員介面</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+</style>
+{% endblock %}

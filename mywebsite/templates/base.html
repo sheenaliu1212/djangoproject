@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- 引用static底下的CSS樣式 -->
+        {% load static %}
+        <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+
+        <!-- 引用Bootstrap -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-
+QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <!--定義替換內容-title-->
+        {% block title %}{% endblock %}
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand">
+                    <img src="https://www.ntue.edu.tw/var/file/0/1000/img/368/footlogo.png" width="30" height="30" class="dinline-block align-text-top" alt="國北教大">
+                </a>
+                <a class="navbar-brand" href="/">MyWebSite</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
+                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        </li>
+                        {% if request.user.is_authenticated %}
+                        {% if request.user.username == 'admin' %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/user_admin/users/">User List</a></li>
+                                <li><a class="dropdown-item" href="/user_admin/users/add/">Add User</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/user_admin/users/manage/">Manage Users</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Student</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/students/index/">Student List</a></li>
+                                <li><a class="dropdown-item" href="/students/stdSearch/">Search Student</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/students/stdFormModel/">Add Student (Model)</a></li>
+                                <li><a class="dropdown-item" href="/students/stdForm/">Add Student</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Member</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/cookiessessions/login/">My Account</a></li>
+                                <li><a class="dropdown-item" href="/cookiessessions/logout/">Logout</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Flower</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/flower/">Flower List</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Member</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/cookiessessions/login/">Login</a></li>
+                                <li><a class="dropdown-item" href="/cookiessessions/register/">Register</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    {% if request.user.is_authenticated %}
+                    <div class="d-flex">
+                        <span class="navbar-text me-3">
+                            <i class="fas fa-user me-1"></i> 歡迎，{{ request.user.username }}
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        <br>
+        <br>
+        <br>
+        <main class="container flex-grow-1">
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-
+YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        
+        <footer class="footer mt-auto py-2 bg-dark text-white">
+            <div class="container">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 py-1">
+                    <div class="col">
+                        <h6>關於我們</h6>
+                        <ul class="list-unstyled small mb-0">
+                            <li><a href="#" class="text-white-50">公司簡介</a></li>
+                            <li><a href="#" class="text-white-50">聯絡我們</a></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h6>客戶服務</h6>
+                        <ul class="list-unstyled small mb-0">
+                            <li><a href="#" class="text-white-50">常見問題</a></li>
+                            <li><a href="#" class="text-white-50">付款方式</a></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h6>追蹤我們</h6>
+                        <div class="d-flex gap-2">
+                            <a href="#" class="text-white-50"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="text-white-50"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-white-50"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <input type="email" class="form-control form-control-sm" placeholder="訂閱電子報">
+                        </div>
+                        <button class="btn btn-sm btn-outline-light" type="button">訂閱</button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-2">
+                <p class="small text-white-50 mb-0">&copy; 2024 MyWebSite</p>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}<title>會員註冊</title>{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">會員註冊</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/cookiessessions/register/" method="POST" name="form1">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">帳號</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="請設定帳號" required>
+                            </div>
+                            <small class="form-text text-muted">帳號長度需大於6個字元</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">密碼</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="請設定密碼" required>
+                            </div>
+                            <small class="form-text text-muted">密碼長度需大於8個字元</small>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password_confirm" class="form-label">確認密碼</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="請再次輸入密碼" required>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" name="button" id="button" class="btn btn-success btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>註冊
+                            </button>
+                        </div>
+                        <div class="text-center mt-3">
+                            <p>已有帳號？ <a href="/cookiessessions/login/" class="text-decoration-none">返回登入</a></p>
+                        </div>
+                        {% if message %}
+                            <div class="alert alert-{% if success %}success{% else %}danger{% endif %} mt-3">
+                                <i class="fas fa-{% if success %}check-circle{% else %}exclamation-circle{% endif %} me-2"></i>
+                                {{ message }}
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

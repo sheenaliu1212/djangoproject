@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}<title>{% trans "帳號連接管理" %}</title>{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow">
+      <div class="card-header bg-info text-white text-center">
+        <h4><i class="fas fa-link me-2"></i>{% trans "第三方帳號連接管理" %}</h4>
+      </div>
+      <div class="card-body p-4">
+        
+        {% if form.accounts %}
+          <div class="mb-4">
+            <h5 class="fw-normal mb-3">{% trans "您已連接的第三方帳號" %}</h5>
+            
+            <form method="post" action="{% url 'socialaccount_connections' %}">
+              {% csrf_token %}
+              
+              <div class="list-group mb-4">
+                {% for base_account in form.accounts %}
+                  {% with base_account.get_provider_account as account %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <div class="form-check">
+                          <input id="id_account_{{ base_account.id }}" type="radio" name="account" value="{{ base_account.id }}" class="form-check-input">
+                          <label for="id_account_{{ base_account.id }}" class="form-check-label">
+                            <span class="fw-bold">
+                              {% if account.get_brand.id == "google" %}
+                                <i class="fab fa-google text-danger me-2"></i>
+                              {% elif account.get_brand.id == "facebook" %}
+                                <i class="fab fa-facebook text-primary me-2"></i>
+                              {% elif account.get_brand.id == "github" %}
+                                <i class="fab fa-github text-dark me-2"></i>
+                              {% else %}
+                                <i class="fas fa-external-link-alt me-2"></i>
+                              {% endif %}
+                              {{ account.get_brand.name }}
+                            </span>
+                          </label>
+                        </div>
+                        <small class="text-muted d-block">{{ account.get_profile_url }}</small>
+                      </div>
+                      <span class="badge bg-success">{% trans "已連接" %}</span>
+                    </div>
+                  {% endwith %}
+                {% endfor %}
+              </div>
+              
+              <div class="d-grid">
+                <button class="btn btn-danger" type="submit">
+                  <i class="fas fa-unlink me-2"></i>{% trans "移除所選連接" %}
+                </button>
+              </div>
+              
+              {% if form.errors %}
+                <div class="alert alert-danger mt-3">
+                  {% for error in form.errors %}
+                    <p class="mb-0"><i class="fas fa-exclamation-circle me-2"></i>{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </form>
+          </div>
+        {% else %}
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>{% trans "您目前沒有連接任何第三方帳號" %}
+          </div>
+        {% endif %}
+        
+        <div class="mt-4">
+          <h5 class="fw-normal mb-3">{% trans "連接新的第三方帳號" %}</h5>
+          
+          <div class="d-grid gap-2">
+            {% for provider in socialaccount_providers %}
+              {% if provider.id == "google" %}
+                <a href="{% provider_login_url provider.id process='connect' %}" class="btn btn-outline-danger d-flex align-items-center justify-content-center">
+                  <i class="fab fa-google me-2"></i>{% trans "連接 Google 帳號" %}
+                </a>
+              {% endif %}
+              {% if provider.id == "facebook" %}
+                <a href="{% provider_login_url provider.id process='connect' %}" class="btn btn-outline-primary d-flex align-items-center justify-content-center">
+                  <i class="fab fa-facebook-f me-2"></i>{% trans "連接 Facebook 帳號" %}
+                </a>
+              {% endif %}
+              {% if provider.id == "github" %}
+                <a href="{% provider_login_url provider.id process='connect' %}" class="btn btn-outline-dark d-flex align-items-center justify-content-center">
+                  <i class="fab fa-github me-2"></i>{% trans "連接 GitHub 帳號" %}
+                </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center text-muted">
+        <div class="mt-2">
+          <a href="/" class="text-decoration-none">
+            <i class="fas fa-home me-1"></i>{% trans "返回首頁" %}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

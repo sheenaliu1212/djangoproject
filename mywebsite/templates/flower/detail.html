@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{{ flower.title }} - 花卉詳情{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-lg border-0 mb-4">
+        <div class="card-header bg-success text-white py-3">
+            <h1 class="display-5 mb-0">{{ flower.title }}</h1>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5 class="text-muted mb-3">描述</h5>
+                    <p class="lead">{{ flower.description }}</p>
+                    
+                    {% if flower.category %}
+                    <div class="mt-4">
+                        <h5 class="text-muted mb-3">分類</h5>
+                        <span class="badge bg-success fs-6 p-2">{{ flower.category }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if flower.tags.all %}
+                    <div class="mt-4">
+                        <h5 class="text-muted mb-3">標籤</h5>
+                        {% for tag in flower.tags.all %}
+                        <span class="badge bg-info text-dark fs-6 p-2 me-2">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mt-4 mt-md-0">
+                    <div class="card bg-light">
+                        <div class="card-header">
+                            <h5 class="mb-0">相關花卉</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if flower.category.flower_set.all %}
+                            <ul class="list-group list-group-flush">
+                                {% for related_flower in flower.category.flower_set.all %}
+                                {% if related_flower.id != flower.id %}
+                                <li class="list-group-item bg-light">
+                                    <a href="{% url 'detail' related_flower.slug %}" class="text-decoration-none">{{ related_flower.title }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p class="card-text">無相關花卉</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-white p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="/flower/" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>返回列表
+                </a>
+                <div>
+                    <a href="/admin/flower/flower/{{ flower.id }}/change/" class="btn btn-outline-primary me-2">編輯</a>
+                    <a href="/admin/flower/flower/{{ flower.id }}/delete/" class="btn btn-outline-danger">刪除</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

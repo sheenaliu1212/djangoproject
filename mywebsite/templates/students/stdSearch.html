@@ -1,0 +1,30 @@
+<!-- 繼承base.html -->
+{% extends 'base.html' %}
+<!-- head -->
+{% block title %}<title>顯示查詢學生資料</title>{% endblock %}
+<!-- body -->
+{% block content %}
+<h2 align="left">顯示 Student 資料表查詢資料</h2>
+{{ errormessage }}
+<table border="1" cellpadding="0" cellspacing="0">
+  <!-- 定義欄位標題 -->
+  <th>編號</th><th>姓名</th><th>性別</th><th>生日</th><th>Email</th><th>手機</th><th>地址</th>
+  <tr>
+    <!--第n列-->
+    <td>{{ result.id }}</td>
+    <!--編號-->
+    <td>{{ result.stdName }}</td>
+    <!--姓名-->
+    <td>{{ result.stdSex }}</td>
+    <!--性別-->
+    <td>{{ result.stdBirthday }}</td>
+    <!--生日-->
+    <td>{{ result.stdEmail }}</td>
+    <!--Email-->
+    <td>{{ result.stdPhone }}</td>
+    <!--手機-->
+    <td>{{ result.stdAddress }}</td>
+    <!--地址-->
+  </tr>
+</table>
+{% endblock %}
