@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ newsItem.title }} - 新聞公告詳情{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-lg border-0 mb-4">
+        <div class="card-header bg-success text-white py-3">
+            <h1 class="display-5 mb-0">【{{ newsItem.category }}】{{ newsItem.title }}</h1>
+        </div>
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <p class="lead">發布人：{{ newsItem.author }}</p>
+                    <p class="lead">{{ newsItem.content }}</p>
+                    
+                    <div class="mt-4">
+                        <h5 class="text-muted mb-3">發布日期</h5>
+                        <span class="badge bg-success fs-6 p-2">{{ newsItem.pub_date }}</span>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h5 class="text-muted mb-3">瀏覽人數</h5>
+                        <span class="badge bg-info text-dark fs-6 p-2 me-2">{{ newsItem.click_count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-white p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="/news/" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>返回列表
+                </a>
+                <!-- <div>
+                    <a href="/admin/flowers/flower/{{ flower.id }}/change/" class="btn btn-outline-primary me-2">編輯</a>
+                    <a href="/admin/flowers/flower/{{ flower.id }}/delete/" class="btn btn-outline-danger">刪除</a>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

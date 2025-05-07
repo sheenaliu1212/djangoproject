@@ -20,6 +20,7 @@ from app001.views import sayhello, hello2, hello3, hello4, dice, employee
 import students.views as stdViews
 import cookiessessions.views as csViews
 import flower.views as fviews
+import news.views as newsViews
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -82,6 +83,12 @@ urlpatterns = [
     path('user_admin/users/add/', csViews.add_user),
     path('user_admin/users/manage/', csViews.manage_users),
     path('user_admin/users/edit/<int:user_id>/', csViews.edit_user),
+
+    # new app
+    # https://127.0.0.1:8000/news/
+    path('news/', newsViews.index),
+    # https://127.0.0.1:8000/news/1/
+    path('news/detail/<int:detail_id>/', newsViews.detail, name='detail'),
 
 ]
 

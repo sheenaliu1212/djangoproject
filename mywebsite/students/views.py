@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from students.models import Student
 from students.forms import PostForm
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required
 def index(request):
     # 抓資料表所有資料的方法
     # 資料表.objects.all()[.order_by(欄位名稱)]
