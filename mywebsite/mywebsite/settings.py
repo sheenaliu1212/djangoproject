@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    # 第三方認證
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
     # news app
     'news',
 ]
