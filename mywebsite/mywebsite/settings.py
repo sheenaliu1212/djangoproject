@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # 第三方認證
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.facebook',
     # news app
     'news',
 ]
@@ -172,6 +173,11 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
+        }
+    },
+    'facebook': {
+        'AUTH_PARAMS': {
+            'access_type': 'reauthenticate',
         }
     }
 }
