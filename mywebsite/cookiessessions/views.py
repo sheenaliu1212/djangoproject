@@ -107,51 +107,49 @@ def vote(request):
     return HttpResponse(message)
 
 def login(request):
-    # 預設狀態與訊息
-    status = "logout"
-    message = ""
-    
     if request.method == "POST":
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
         
-        # 使用Django的authenticate函數驗證用戶
-        user = authenticate(request, username=username, password=password)
+        # 使用 Django 內建的使用者認證系統驗證
+        user = authenticate(username=username, password=password)
         
         if user is not None:
-            # 登入成功，使用Django的login函數
+            # 使用者驗證成功
             auth_login(request, user)
             request.session["username"] = username
-            message = "登入成功"
+            message = "登入成功！歡迎回來，" + username
             status = "login"
         else:
-            # 登入失敗
-            message = "帳號或密碼錯誤"
+            # 使用者驗證失敗
+            message = "帳號或密碼錯誤，請重新輸入"
             status = "logout"
     else:
-        # 檢查用戶是否已經登入
+        # 檢查是否已經通過Django驗證
         if request.user.is_authenticated:
-            username = request.user.username
-            request.session["username"] = username
-            message = f"{username} 已經登入"
+            # 如果用戶已經通過驗證但還沒有session username
+            if "username" not in request.session:
+                request.session["username"] = request.user.username
+            message = f"您已經成功登入系統，歡迎回來，{request.user.username}"
             status = "login"
-    
+        elif "username" in request.session:
+            message = "您已經成功登入系統"
+            status = "login"
+        else:
+            message = ""
+            status = "logout"
     return render(request, "cookiessessions/login.html", locals())
 
 def logout(request):
-    if request.user.is_authenticated:
-        username = request.user.username
-        message = f"{username} 已經登出"
-        
-        # 使用Django的logout函數
-        auth_logout(request)
-        
-        # 清除session
+    if request.user.is_authenticated or "username" in request.session:
         if "username" in request.session:
+            message = request.session["username"] + " 已成功登出系統"
             del request.session["username"]
+        else:
+            message = request.user.username + " 已成功登出系統"
+        auth_logout(request)
     else:
         message = "您尚未登入系統"
-    
     status = "logout"
     return render(request, "cookiessessions/login.html", locals())
 

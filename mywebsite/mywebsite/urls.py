@@ -34,7 +34,7 @@ def home(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     #app001
-    path('', csViews.login),
+    path('', home),
     path('hello2/<str:username>', hello2),
     path('hello3/<str:username>', hello3),
     path('hello4/<str:username>', hello4),
