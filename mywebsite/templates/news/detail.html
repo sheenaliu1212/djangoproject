@@ -2,37 +2,162 @@
 {% block title %}{{ newsItem.title }} - 新聞公告詳情{% endblock %}
 {% block content %}
 <div class="container py-5">
-    <div class="card shadow-lg border-0 mb-4">
-        <div class="card-header bg-success text-white py-3">
-            <h1 class="display-5 mb-0">【{{ newsItem.category }}】{{ newsItem.title }}</h1>
+    <div class="card shadow-lg border-0 rounded-4 mb-4 overflow-hidden">
+        <!-- 精美標題區塊 -->
+        <div class="card-header bg-gradient bg-primary text-white py-3">
+            <h1 class="display-5 fw-bold mb-0">【{{ newsItem.category }}】{{ newsItem.title }}</h1>
+            <div class="d-flex align-items-center mt-2">
+                <span class="badge bg-light text-dark me-2">
+                    <i class="fas fa-user me-1"></i> {{ newsItem.author }}
+                </span>
+                <span class="badge bg-light text-dark me-2">
+                    <i class="fas fa-calendar-alt me-1"></i> {{ newsItem.pub_date }}
+                </span>
+                <span class="badge bg-light text-dark">
+                    <i class="fas fa-eye me-1"></i> {{ newsItem.click_count }}
+                </span>
+            </div>
         </div>
-        <div class="card-body p-4">
+        <!-- 內容區塊 -->
+        <div class="card-body p-4 p-lg-5">
             <div class="row">
-                <div class="col-md-8">
-                    <p class="lead">發布人：{{ newsItem.author }}</p>
-                    <p class="lead">{{ newsItem.content }}</p>
-                    
-                    <div class="mt-4">
-                        <h5 class="text-muted mb-3">發布日期</h5>
-                        <span class="badge bg-success fs-6 p-2">{{ newsItem.pub_date }}</span>
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <!-- 內容展示區 -->
+                    <div class="news-content mb-5 fs-5">
+                        {{ newsItem.content|linebreaks }}
                     </div>
                     
-                    <div class="mt-4">
-                        <h5 class="text-muted mb-3">瀏覽人數</h5>
-                        <span class="badge bg-info text-dark fs-6 p-2 me-2">{{ newsItem.click_count }}</span>
+                    <!-- 資訊卡片區 -->
+                    <div class="row g-4 mt-4">
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 bg-light rounded-3">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">
+                                        <i class="fas fa-calendar-alt me-2"></i>發布日期
+                                    </h5>
+                                    <p class="card-text fs-5">{{ newsItem.pub_date }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 bg-light rounded-3">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">
+                                        <i class="fas fa-eye me-2"></i>瀏覽人數
+                                    </h5>
+                                    <p class="card-text fs-5">{{ newsItem.click_count }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 管理員操作區塊 -->
+                    {% if user.is_staff %}
+                    <div class="mt-5 p-3 bg-light rounded-3">
+                        <h4 class="text-primary">
+                            <i class="fas fa-cog me-2"></i>管理員操作
+                        </h4>
+                        <div class="d-flex mt-3">
+                            <a href="{% url 'edit_news' newsItem.id %}" class="btn btn-primary me-2">
+                                <i class="fas fa-edit me-2"></i>編輯公告
+                            </a>
+                            <a href="{% url 'delete_news' newsItem.id %}" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>刪除公告
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- 回覆功能區 -->
+                    <div id="reply" class="mt-5">
+                        <h4 class="text-primary border-bottom pb-3 mb-4">
+                            <i class="fas fa-comments me-2"></i>公告回覆
+                        </h4>
+
+                        <!-- 已有的回覆列表 -->
+                        <div class="mb-4">
+                            {% if news_replies %}
+                                {% for reply in news_replies %}
+                                <div class="card mb-3 shadow-sm">
+                                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-user-circle me-2"></i>
+                                            <strong>{{ reply.user.username }}</strong>
+                                        </div>
+                                        <small class="text-muted">{{ reply.created_at|date:"Y-m-d H:i" }}</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">{{ reply.content }}</p>
+                                        
+                                        <!-- 管理員可刪除任何回覆 -->
+                                        {% if user.is_staff or user.id == reply.user.id %}
+                                        <div class="text-end mt-2">
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-outline-danger"
+                                               onclick="if(confirm('確定要刪除此回覆嗎?')) window.location.href='/news/reply/{{ reply.id }}/delete/'">
+                                                <i class="fas fa-trash-alt me-1"></i>刪除
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>目前尚無回覆
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- 回覆表單 - 僅登入用戶可見 -->
+                        {% if user.is_authenticated %}
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-reply me-2"></i>新增回覆
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form method="post" action="/news/{{ newsItem.id }}/reply/">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <textarea class="form-control" name="content" rows="3" placeholder="請輸入您的回覆..." required></textarea>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-paper-plane me-2"></i>發送回覆
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            請<a href="/accounts/login/?next={{ request.path }}" class="alert-link">登入</a>後參與討論
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card-footer bg-white p-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <a href="/news/" class="btn btn-outline-secondary">
+        <!-- 底部操作區塊 -->
+        <div class="card-footer bg-white p-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <a href="/news/" class="btn btn-primary rounded-pill px-4 py-2">
                     <i class="fas fa-arrow-left me-2"></i>返回列表
                 </a>
-                <!-- <div>
-                    <a href="/admin/flowers/flower/{{ flower.id }}/change/" class="btn btn-outline-primary me-2">編輯</a>
-                    <a href="/admin/flowers/flower/{{ flower.id }}/delete/" class="btn btn-outline-danger">刪除</a>
-                </div> -->
+                <!-- 社交分享 -->
+                <div class="d-flex mt-3 mt-md-0">
+                    <a href="#" class="btn btn-outline-secondary rounded-circle mx-1" title="分享至Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-secondary rounded-circle mx-1" title="分享至Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-secondary rounded-circle mx-1" title="分享至LINE">
+                        <i class="fab fa-line"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
