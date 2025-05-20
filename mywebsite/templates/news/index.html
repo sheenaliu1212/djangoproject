@@ -61,9 +61,9 @@
                         
                         {% if user.is_staff %}
                         <!-- 管理員功能按鈕 -->
-                        <!-- <a href="% url 'edit_news' newsItem.id %" class="btn btn-sm btn-outline-primary me-2">
+                        <a href="{% url 'edit_news' newsItem.id %}" class="btn btn-sm btn-outline-primary me-2">
                             <i class="fas fa-edit me-1"></i> 編輯
-                        </a> -->
+                        </a>
                         <a href="{% url 'delete_news' newsItem.id %}" class="btn btn-sm btn-outline-danger">
                             <i class="fas fa-trash me-1"></i> 刪除
                         </a>

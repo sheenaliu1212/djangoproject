@@ -66,3 +66,15 @@ def delete_news(request, news_id):
         return redirect('/news/')
 
     return render(request, 'news/delete_news.html', locals())
+
+def edit_news(request, news_id):
+    if not request.user.is_staff:
+        return redirect('/news/')
+    
+    newsItem = get_object_or_404(NewsUnit, id=news_id)
+
+    if request.method == 'POST':
+        newsItem.delete()
+        return redirect('/news/')
+
+    return render(request, 'news/edit_news.html', locals())
