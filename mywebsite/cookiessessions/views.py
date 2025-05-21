@@ -4,6 +4,15 @@ from django.http import HttpResponse
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from captcha.fields import CaptchaField
+from django import forms
+
+
+# 創建一個表單類別，用於登入並包含驗證碼
+class LoginForm(forms.Form):
+    username = forms.CharField(label='帳號', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '請輸入您的帳號'}))
+    password = forms.CharField(label='密碼', max_length=100, widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '請輸入您的密碼'}))
+    captcha = CaptchaField(label='驗證碼')
 
 # Create your views here.
 def set_cookie(request, key, value):
@@ -108,23 +117,31 @@ def vote(request):
 
 def login(request):
     if request.method == "POST":
-        username = request.POST.get("username", "")
-        password = request.POST.get("password", "")
-        
-        # 使用 Django 內建的使用者認證系統驗證
-        user = authenticate(username=username, password=password)
-        
-        if user is not None:
-            # 使用者驗證成功
-            auth_login(request, user)
-            request.session["username"] = username
-            message = "登入成功！歡迎回來，" + username
-            status = "login"
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            
+            # 使用 Django 內建的使用者認證系統驗證
+            user = authenticate(username=username, password=password)
+            
+            if user is not None:
+                # 使用者驗證成功
+                auth_login(request, user)
+                request.session["username"] = username
+                message = "登入成功！歡迎回來，" + username
+                status = "login"
+            else:
+                # 使用者驗證失敗
+                message = "帳號或密碼錯誤，請重新輸入"
+                status = "logout"
         else:
-            # 使用者驗證失敗
-            message = "帳號或密碼錯誤，請重新輸入"
+            message = "請填寫完整的表單和正確的驗證碼"
             status = "logout"
     else:
+        # 創建一個新的表單對象
+        form = LoginForm()
+        
         # 檢查是否已經通過Django驗證
         if request.user.is_authenticated:
             # 如果用戶已經通過驗證但還沒有session username
@@ -139,7 +156,6 @@ def login(request):
             message = ""
             status = "logout"
     return render(request, "cookiessessions/login.html", locals())
-
 def logout(request):
     if request.user.is_authenticated or "username" in request.session:
         if "username" in request.session:

@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     # news app
     'news',
+    # captcha app
+    'captcha',
 ]
 
 MIDDLEWARE = [
