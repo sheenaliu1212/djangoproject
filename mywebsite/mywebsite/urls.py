@@ -21,6 +21,7 @@ import students.views as stdViews
 import cookiessessions.views as csViews
 import flower.views as fviews
 import news.views as newsViews
+import plant.views as pviews
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -97,6 +98,13 @@ urlpatterns = [
     
     # captcha URLs
     path('captcha/', include('captcha.urls')),
+
+    # plant app
+    path('plant/', pviews.plants, name='index'),
+    path('plant/<slug:slug>/', pviews.detail, name='plant_detail'),
+    path('plant/create/', pviews.create, name='create'),
+    path('tags/<slug:slug>/', pviews.tags, name='tags'),
+    path('plant/edit/<int:pk>', pviews.edit, name='edit'),
 ]
 
 # 處理媒體檔案

@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'news',
     # captcha app
     'captcha',
+    #plant app
+    'plant',
 ]
 
 MIDDLEWARE = [
