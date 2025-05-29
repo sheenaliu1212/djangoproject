@@ -1,17 +1,27 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from plant.models import Plant
+from plant.models import Plant, Category, Tag
 from .forms import PlantForm
 
 # Create your views here.
 def plants(request):
     q = request.GET.get('q', None)
-    plants = ''
-    if q is None or q is "":
-        plants = Plant.objects.all()
-    elif q is not None:
-        plants = Plant.objects.filter(title__contains=q)
-    return render(request, 'plant/plant.html', {'plants': plants })
+    category = request.GET.get('category', None)
+    tag = request.GET.get('tag', None)
+
+    plants = Plant.objects.all()
+
+    if q:
+        plants = plants.filter(title__contains=q)
+    if category:
+        plants = plants.filter(category__title=category)
+    if tag:
+        plants = plants.filter(tags__title=tag)
+    
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+
+    return render(request, 'plant/plant.html', {'plants': plants, 'categories': categories, 'tags': tags, 'selected_category': category, 'selected_tag': tag, 'q': q})
 
 def detail(request, slug=None):
     plant = get_object_or_404(Plant, slug=slug)
