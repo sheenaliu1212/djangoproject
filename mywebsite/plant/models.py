@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 # 定義分類名稱欄位
 class Category(models.Model):
@@ -22,6 +23,7 @@ class Plant(models.Model):
     category = models.ForeignKey(Category, null=True, on_delete=models.PROTECT)
     tags = models.ManyToManyField(Tag)
     image = models.ImageField(upload_to='plants/', null=True, blank=True)
+    video_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.title

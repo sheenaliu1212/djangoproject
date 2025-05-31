@@ -35,6 +35,13 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text text-muted"><i class="fas fa-leaf me-2 text-success"></i>{{ plant.description | truncatechars:100 }}</p>
+                    <div class="d-flex justify-content-between mb-3">
+                        {% if plant.video_url %}
+                        <a href="{{plant.video_url}}" target="_blank" class="btn btn-sm btn-danger">
+                            <i class="fas fa-video me-1"></i>觀看影片
+                        </a>
+                        {% endif %}
+                    </div>
                     <div class="d-flex align-items-center mb-2">
                         <span class="badge bg-success me-2">{{ plant.category }}</span>
                     </div>
@@ -69,6 +76,7 @@
         transition: all 0.3s ease; 
     }
     .hover-shadow:hover {
+        background-color: lightgray;
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         transform: translateY(-15px);
     }

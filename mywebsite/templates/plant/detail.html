@@ -10,8 +10,14 @@
             <div class="row">
                 <div class="col-md-8">
                     <h5 class="text-muted mb-3">描述</h5>
-                    <p class="lead">{{ plant.description }}</p>
-                    
+                    <p class="lead">{{ plant.description }}</p>             
+                    {% if plant.video_url %}
+                        <div class="mt-4">
+                            <a href="{{plant.video_url}}" target="_blank" class="btn btn-sm btn-danger">
+                                <i class="fas fa-video me-1"></i>觀看影片
+                            </a>
+                        </div>                  
+                    {% endif %}
                     {% if plant.category %}
                     <div class="mt-4">
                         <h5 class="text-muted mb-3">分類</h5>

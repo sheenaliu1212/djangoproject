@@ -99,7 +99,7 @@ urlpatterns = [
     # captcha URLs
     path('captcha/', include('captcha.urls')),
 
-    # plant app
+    # plant app    
     path('plant/', pviews.plants, name='index'),
     path('plant/<slug:slug>/', pviews.detail, name='plant_detail'),
     path('plant/create/', pviews.create, name='create'),
