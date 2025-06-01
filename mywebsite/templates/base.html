@@ -54,7 +54,7 @@ QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="a
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Plants</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/plant/">Plants</a></li>
-                                <li><a class="dropdown-item" href="/plant/favorite/">我的最愛植物清單</a></li>
+                                <li><a class="dropdown-item" href="/plant/favorite_list/">我的最愛植物清單</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -92,6 +92,16 @@ QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="a
         <br>
         <main class="container flex-grow-1">
             <div id="content">
+                {% if messages %}
+                <div class="messages mt-3">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
                 {% block content %}{% endblock %}
             </div>
         </main>

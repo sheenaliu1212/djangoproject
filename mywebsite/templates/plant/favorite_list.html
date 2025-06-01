@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}我的最愛植物清單{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">我的最愛植物清單</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for plant in plants %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 rounded-4 hover-shadow">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0"><a href="{% url 'plant_detail' plant.slug %}" class="text-decoration-none">{{ plant.title }}</a></h5>
+                </div>
+                <br>
+                <div class="text-center">
+                    {% if plant.image %}
+                    <a href="{% url 'plant_detail' plant.slug %}" class="text-decoration-none">
+                        <img src="{{ plant.image.url }}" class="img-fluid" alt="{{ plant.title }}" style="height: 200px; width: 200px; object-fit: cover;">
+                    </a>
+                    {% else %}
+                    <div class="bg-light text-center py-5 my-2">
+                        <span class="text-muted">無圖片</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-muted"><i class="fas fa-leaf me-2 text-success"></i>{{ plant.description | truncatechars:100 }}</p>
+                    <div class="d-flex justify-content-between mb-3">
+                        {% if plant.video_url %}
+                        <a href="{{plant.video_url}}" target="_blank" class="btn btn-sm btn-danger">
+                            <i class="fas fa-video me-1"></i>觀看影片
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-success me-2">{{ plant.category }}</span>
+                    </div>
+                    <div class="mb-2">
+                        {% for tag in plant.tags.all %}
+                            <span class="badge bg-info text-dark">{{ tag.title }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <form method="POST" action="{% url 'favorite' plant.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-heart"></i> 取消收藏
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="lead text-muted">您還沒有收藏任何植物</p>
+            <a href="{% url 'index' %}" class="btn btn-primary">瀏覽植物</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .hover-shadow {
+        transition: all 0.3s ease; 
+    }
+    .hover-shadow:hover {
+        background-color: lightgray;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transform: translateY(-15px);
+    }
+</style>
+{% endblock %}

@@ -101,10 +101,12 @@ urlpatterns = [
 
     # plant app    
     path('plant/', pviews.plants, name='index'),
-    path('plant/<slug:slug>/', pviews.detail, name='plant_detail'),
     path('plant/create/', pviews.create, name='create'),
     path('tags/<slug:slug>/', pviews.tags, name='tags'),
     path('plant/edit/<int:pk>', pviews.edit, name='edit'),
+    path('plant/<int:id>/favorite/', pviews.favorite, name='favorite'),
+    path('plant/favorite_list/', pviews.favorite_list, name='favorite_list'),
+    path('plant/<slug:slug>/', pviews.detail, name='plant_detail'),
 ]
 
 # 處理媒體檔案

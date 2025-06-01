@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
-from plant.models import Plant, Category, Tag
+from plant.models import Plant, Category, Tag, PlantFavorite
 from .forms import PlantForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.contrib import messages
 
 # Create your views here.
 def plants(request):
@@ -52,3 +54,24 @@ def edit(request, pk=None):
     else:
         form = PlantForm(instance=plant)
     return render(request, "plant/edit.html", locals())
+
+@require_POST
+@login_required
+def favorite(request, id):
+    plant = get_object_or_404(Plant, id=id)
+    favorite = plant.favorite_users.filter(id=request.user.id).first()
+    
+    if favorite:
+        PlantFavorite.objects.get(user=request.user, plant=plant).delete()
+        messages.success(request, f'已取消收藏 {plant.title}')
+    else:
+        PlantFavorite(user=request.user, plant=plant).save()
+        messages.success(request, f'已收藏 {plant.title}')
+    
+    # Redirect back to the previous page
+    return HttpResponseRedirect(f"/plant/{plant.slug}/")
+
+@login_required
+def favorite_list(request):
+    plants = Plant.objects.filter(favorite_users=request.user)
+    return render(request, 'plant/favorite_list.html', {'plants': plants})

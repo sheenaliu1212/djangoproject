@@ -24,6 +24,8 @@ class Plant(models.Model):
     tags = models.ManyToManyField(Tag)
     image = models.ImageField(upload_to='plants/', null=True, blank=True)
     video_url = models.URLField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    favorite_users = models.ManyToManyField(User, related_name='favorite_plants', through='PlantFavorite', through_fields=('plant', 'user'))
 
     def __str__(self):
         return self.title
@@ -36,3 +38,12 @@ class Plant(models.Model):
 
     def get_absolute_url(self):
         return reverse("detail", args=[str(self.slug)])
+
+# 定義收藏關聯模型
+class PlantFavorite(models.Model):
+    plant = models.ForeignKey("Plant", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} favorites {self.plant.title}"
