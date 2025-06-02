@@ -24,6 +24,12 @@ class Plant(models.Model):
     tags = models.ManyToManyField(Tag)
     image = models.ImageField(upload_to='plants/', null=True, blank=True)
     video_url = models.URLField(blank=True, null=True)
+    temperature = models.CharField(max_length=255, default="", blank=True, help_text="溫度需求")
+    humidity = models.CharField(max_length=255, default="", blank=True, help_text="濕度需求")
+    light_requirement = models.CharField(max_length=255, default="", blank=True, help_text="光照需求")
+    watering = models.CharField(max_length=255, default="", blank=True, help_text="澆水頻率")
+    repotting = models.CharField(max_length=255, default="", blank=True, help_text="換盆建議")
+    precaution = models.CharField(max_length=255, default="", blank=True, help_text="注意事項")
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     favorite_users = models.ManyToManyField(User, related_name='favorite_plants', through='PlantFavorite', through_fields=('plant', 'user'))
 

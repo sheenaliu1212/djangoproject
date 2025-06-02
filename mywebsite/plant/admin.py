@@ -4,6 +4,26 @@ from .models import Plant, Category, Tag, PlantFavorite
 
 class PlantAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
+    fieldsets = (
+        ('基本信息', {
+            'fields': ('title', 'slug', 'description', 'image', 'video_url')
+        }),
+        ('分類信息', {
+            'fields': ('category', 'tags')
+        }),
+        ('生長條件', {
+            'fields': ('temperature', 'humidity', 'light_requirement'),
+            'classes': ('collapse',)
+        }),
+        ('養護技巧', {
+            'fields': ('watering', 'repotting', 'precaution'),
+            'classes': ('collapse',)
+        }),
+        ('用戶相關', {
+            'fields': ('user',),
+            'classes': ('collapse',)
+        }),
+    )
 
 admin.site.register(Plant, PlantAdmin)
 admin.site.register(Category)

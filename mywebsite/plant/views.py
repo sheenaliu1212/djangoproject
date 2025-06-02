@@ -30,6 +30,14 @@ def detail(request, slug=None):
     plant = get_object_or_404(Plant, slug=slug)
     return render(request, 'plant/detail.html', locals())
 
+def detail_condition(request, slug=None):
+    plant = get_object_or_404(Plant, slug=slug)
+    return render(request, 'plant/detail_condition.html', locals())
+
+def detail_care(request, slug=None):
+    plant = get_object_or_404(Plant, slug=slug)
+    return render(request, 'plant/detail_care.html', locals())
+
 def tags(request, slug=None):
     plants = Plant.objects.filter(tags__slug=slug)
     return render(request, 'plant/plant.html', locals())

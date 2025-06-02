@@ -107,6 +107,8 @@ urlpatterns = [
     path('plant/<int:id>/favorite/', pviews.favorite, name='favorite'),
     path('plant/favorite_list/', pviews.favorite_list, name='favorite_list'),
     path('plant/<slug:slug>/', pviews.detail, name='plant_detail'),
+    path('plant/<slug:slug>/detail_condition/', pviews.detail_condition, name='detail_condition'),
+    path('plant/<slug:slug>/detail_care/', pviews.detail_care, name='detail_care'),
 ]
 
 # 處理媒體檔案
