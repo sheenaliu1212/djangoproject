@@ -2,71 +2,115 @@
 {% block title %}我的最愛植物清單{% endblock %}
 {% block content %}
 <div class="container py-5">
-    <h2 class="text-center mb-4">我的最愛植物清單</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for plant in plants %}
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0 rounded-4 hover-shadow">
-                <div class="card-header bg-light">
-                    <h5 class="card-title mb-0"><a href="{% url 'plant_detail' plant.slug %}" class="text-decoration-none">{{ plant.title }}</a></h5>
-                </div>
-                <br>
-                <div class="text-center">
-                    {% if plant.image %}
-                    <a href="{% url 'plant_detail' plant.slug %}" class="text-decoration-none">
-                        <img src="{{ plant.image.url }}" class="img-fluid" alt="{{ plant.title }}" style="height: 200px; width: 200px; object-fit: cover;">
-                    </a>
-                    {% else %}
-                    <div class="bg-light text-center py-5 my-2">
-                        <span class="text-muted">無圖片</span>
+    <div class="card shadow-lg border-0 mb-4" style="background: #dfe8df;">
+        <div class="card-header py-4" style="background: #3B3B1A;">
+            <h2 class="text-center text-white mb-0">
+                <i class="fas fa-heart me-2"></i>我的最愛植物清單
+            </h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for plant in plants %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 rounded-4 hover-shadow" style="background: rgba(255, 255, 255, 0.9);">
+                        <div class="card-header" style="background: #3B3B1A;">
+                            <h5 class="card-title mb-0">
+                                <a href="{% url 'plant_detail' plant.slug %}" class="text-decoration-none text-white">
+                                    <i class="fas fa-leaf me-2"></i>{{ plant.title }}
+                                </a>
+                            </h5>
+                        </div>
+                        <div class="text-center p-3">
+                            {% if plant.image %}
+                            <a href="{% url 'plant_detail' plant.slug %}" class="text-decoration-none">
+                                <img src="{{ plant.image.url }}" class="img-fluid rounded" alt="{{ plant.title }}" style="height: 200px; width: 200px; object-fit: cover;">
+                            </a>
+                            {% else %}
+                            <div class="bg-light text-center py-5 my-2 rounded">
+                                <i class="fas fa-image text-muted fa-3x"></i>
+                                <p class="text-muted mt-2">無圖片</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text text-muted">
+                                <i class="fas fa-leaf me-2" style="color: #3B3B1A;"></i>{{ plant.description | truncatechars:100 }}
+                            </p>
+                            <div class="d-flex justify-content-between mb-3">
+                                {% if plant.video_url %}
+                                <a href="{{plant.video_url}}" target="_blank" class="btn" style="background-color: #E7EFC7; color: #3B3B1A;">
+                                    <i class="fas fa-video me-1"></i>觀看影片
+                                </a>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="badge me-2" style="background-color: #8A784E; color: white;">
+                                    <i class="fas fa-tag me-1"></i>{{ plant.category }}
+                                </span>
+                            </div>
+                            <div class="mb-2">
+                                {% for tag in plant.tags.all %}
+                                <span class="badge" style="background-color: #AEC8A4; color: #3B3B1A;">
+                                    <i class="fas fa-hashtag me-1"></i>{{ tag.title }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <form method="POST" action="{% url 'favorite' plant.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn w-100" style="background-color: #3B3B1A; color: white;">
+                                    <i class="fas fa-heart me-2"></i>取消收藏
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    {% endif %}
                 </div>
-                <div class="card-body">
-                    <p class="card-text text-muted"><i class="fas fa-leaf me-2 text-success"></i>{{ plant.description | truncatechars:100 }}</p>
-                    <div class="d-flex justify-content-between mb-3">
-                        {% if plant.video_url %}
-                        <a href="{{plant.video_url}}" target="_blank" class="btn btn-sm btn-danger">
-                            <i class="fas fa-video me-1"></i>觀看影片
+                {% empty %}
+                <div class="col-12 text-center">
+                    <div class="p-5 rounded" style="background: rgba(255, 255, 255, 0.9);">
+                        <i class="fas fa-heart-broken text-muted fa-3x mb-3"></i>
+                        <p class="lead text-muted">您還沒有收藏任何植物</p>
+                        <a href="{% url 'index' %}" class="btn" style="background-color: #8A784E; color: white;">
+                            <i class="fas fa-leaf me-2"></i>瀏覽植物
                         </a>
-                        {% endif %}
-                    </div>
-                    <div class="d-flex align-items-center mb-2">
-                        <span class="badge bg-success me-2">{{ plant.category }}</span>
-                    </div>
-                    <div class="mb-2">
-                        {% for tag in plant.tags.all %}
-                            <span class="badge bg-info text-dark">{{ tag.title }}</span>
-                        {% endfor %}
                     </div>
                 </div>
-                <div class="card-footer bg-white">
-                    <form method="POST" action="{% url 'favorite' plant.id %}" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                            <i class="fas fa-heart"></i> 取消收藏
-                        </button>
-                    </form>
-                </div>
+                {% endfor %}
             </div>
         </div>
-        {% empty %}
-        <div class="col-12 text-center">
-            <p class="lead text-muted">您還沒有收藏任何植物</p>
-            <a href="{% url 'index' %}" class="btn btn-primary">瀏覽植物</a>
-        </div>
-        {% endfor %}
     </div>
 </div>
 
 <style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    .card-header {
+        border-bottom: none;
+    }
     .hover-shadow {
-        transition: all 0.3s ease; 
+        transition: all 0.3s ease;
     }
     .hover-shadow:hover {
-        background-color: lightgray;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        transform: translateY(-15px);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    .badge {
+        transition: all 0.2s;
+    }
+    .badge:hover {
+        transform: scale(1.05);
+    }
+    .btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        background-color: #AEC8A4 !important;
+        color: #3B3B1A !important;
+    }
+    .rounded {
+        border-radius: 10px;
     }
 </style>
 {% endblock %}

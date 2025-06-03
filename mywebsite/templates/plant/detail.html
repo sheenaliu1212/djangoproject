@@ -2,16 +2,18 @@
 {% block title %}{{ plant.title }} - 植物詳情{% endblock %}
 {% block content %}
 <div class="container py-5">
-    <div class="card shadow-lg border-0 mb-4">
-        <div class="card-header bg-success text-white py-3">
+    <div class="card shadow-lg border-0 mb-4" style="background: #dfe8df;">
+        <div class="card-header py-4" style="background: #3B3B1A;">
             <div class="d-flex justify-content-between align-items-center">
-                <h1 class="display-5 mb-0">{{ plant.title }}</h1>
+                <h1 class="display-5 mb-0 text-white">
+                    <i class="fas fa-leaf me-2"></i>{{ plant.title }}
+                </h1>
                 {% if user.is_authenticated %}
                 <form method="POST" action="{% url 'favorite' plant.id %}" class="d-inline">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-light">
+                    <button type="submit" class="btn" style="background-color: #8A784E; color: white;">
                         {% if plant in user.favorite_plants.all %}
-                        <i class="fas fa-heart text-danger"></i> 已收藏
+                        <i class="fas fa-heart"></i> 已收藏
                         {% else %}
                         <i class="far fa-heart"></i> 收藏
                         {% endif %}
@@ -23,58 +25,71 @@
         <div class="card-body p-4">
             <div class="row">
                 <div class="col-md-8">
-                    <h5 class="text-muted mb-3">描述</h5>
-                    <p class="lead">{{ plant.description }}</p>  
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="mb-4 p-4 rounded" style="background-color: rgba(255, 255, 255, 0.9); border-left: 4px solid #8A784E;">
+                        <h5 class="mb-3" style="color: #3B3B1A !important;">
+                            <i class="fas fa-info-circle me-2"></i>描述
+                        </h5>
+                        <p class="lead text-dark">{{ plant.description }}</p>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-4">
                         {% if plant.video_url %}
-                            <div class="mt-4">
-                                <a href="{{plant.video_url}}" target="_blank" class="btn btn-sm btn-danger me-2">
+                            <div class="d-flex gap-2">
+                                <a href="{{plant.video_url}}" target="_blank" class="btn" style="background-color: #E7EFC7; color: #3B3B1A;">
                                     <i class="fas fa-video me-1"></i>觀看影片
                                 </a>
-                                <a href="{% url 'detail_condition' plant.slug %}" class="btn btn-sm btn-info me-2">
+                                <a href="{% url 'detail_condition' plant.slug %}" class="btn" style="background-color: #E7EFC7; color: #3B3B1A;">
                                     <i class="fas fa-sun me-1"></i>生長條件
                                 </a>
-                                <a href="{% url 'detail_care' plant.slug %}" class="btn btn-sm btn-warning">
+                                <a href="{% url 'detail_care' plant.slug %}" class="btn" style="background-color: #E7EFC7; color: #3B3B1A;">
                                     <i class="fas fa-leaf me-1"></i>養護技巧
                                 </a>
                             </div>                  
                         {% endif %}
-                        
                     </div>
+
                     {% if plant.category %}
-                    <div class="mt-4">
-                        <h5 class="text-muted mb-3">分類</h5>
-                        <span class="badge bg-success fs-6 p-2">{{ plant.category }}</span>
+                    <div class="mt-4 p-4 rounded" style="background-color: rgba(255, 255, 255, 0.9); border-left: 4px solid #8A784E;">
+                        <h5 class="mb-3" style="color: #3B3B1A !important;">
+                            <i class="fas fa-tags me-2"></i>分類
+                        </h5>
+                        <span class="badge fs-6 p-2" style="background-color: #8A784E; color: white;">{{ plant.category }}</span>
                     </div>
                     {% endif %}
                     
                     {% if plant.tags.all %}
-                    <div class="mt-4">
-                        <h5 class="text-muted mb-3">標籤</h5>
+                    <div class="mt-4 p-4 rounded" style="background-color: rgba(255, 255, 255, 0.9); border-left: 4px solid #8A784E;">
+                        <h5 class="mb-3" style="color: #3B3B1A !important;">
+                            <i class="fas fa-tag me-2"></i>標籤
+                        </h5>
                         {% for tag in plant.tags.all %}
-                        <span class="badge bg-info text-dark fs-6 p-2 me-2">{{ tag }}</span>
+                        <span class="badge fs-6 p-2 me-2" style="background-color: #AEC8A4; color: #3B3B1A;">{{ tag }}</span>
                         {% endfor %}
                     </div>
                     {% endif %}
                 </div>
                 <div class="col-md-4 mt-4 mt-md-0">
-                    <div class="card bg-light">
-                        <div class="card-header">
-                            <h5 class="mb-0">相關植物</h5>
+                    <div class="card border-0 shadow-sm" style="background: rgba(255, 255, 255, 0.9);">
+                        <div class="card-header" style="background: #3B3B1A;">
+                            <h5 class="mb-0 text-white">
+                                <i class="fas fa-seedling me-2"></i>相關植物
+                            </h5>
                         </div>
                         <div class="card-body">
                             {% if plant.category.plant_set.all %}
                             <ul class="list-group list-group-flush">
                                 {% for related_plant in plant.category.plant_set.all %}
                                 {% if related_plant.id != plant.id %}
-                                <li class="list-group-item bg-light">
-                                    <a href="{% url 'plant_detail' related_plant.slug %}" class="text-decoration-none">{{ related_plant.title }}</a>
+                                <li class="list-group-item" style="background: transparent;">
+                                    <a href="{% url 'plant_detail' related_plant.slug %}" class="text-decoration-none" style="color: #3B3B1A;">
+                                        <i class="fas fa-leaf me-2"></i>{{ related_plant.title }}
+                                    </a>
                                 </li>
                                 {% endif %}
                                 {% endfor %}
                             </ul>
                             {% else %}
-                            <p class="card-text">無相關植物</p>
+                            <p class="card-text text-muted">無相關植物</p>
                             {% endif %}
                         </div>
                     </div>
@@ -83,15 +98,52 @@
         </div>
         <div class="card-footer bg-white p-3">
             <div class="d-flex justify-content-between align-items-center">
-                <a href="/plant/" class="btn btn-outline-secondary">
+                <a href="/plant/" class="btn" style="background-color: #6c757d; color: white;">
                     <i class="fas fa-arrow-left me-2"></i>返回列表
                 </a>
                 <div>
-                    <a href="/admin/plant/plant/{{ plant.id }}/change/" class="btn btn-outline-primary me-2">編輯</a>
-                    <a href="/admin/plant/plant/{{ plant.id }}/delete/" class="btn btn-outline-danger">刪除</a>
+                    <a href="/admin/plant/plant/{{ plant.id }}/change/" class="btn me-2" style="background-color: #8A784E; color: white;">
+                        <i class="fas fa-edit me-2"></i>編輯
+                    </a>
+                    <a href="/admin/plant/plant/{{ plant.id }}/delete/" class="btn" style="background-color: #3B3B1A; color: white;">
+                        <i class="fas fa-trash me-2"></i>刪除
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    .card-header {
+        border-bottom: none;
+    }
+    .rounded {
+        border-radius: 10px;
+        transition: transform 0.2s;
+    }
+    .rounded:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        background-color: #AEC8A4 !important;
+        color: #3B3B1A !important;
+    }
+    .badge {
+        transition: all 0.2s;
+    }
+    .badge:hover {
+        transform: scale(1.05);
+    }
+    .list-group-item a:hover {
+        color: #8A784E !important;
+    }
+</style>
 {% endblock %}
